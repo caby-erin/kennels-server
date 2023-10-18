@@ -2,12 +2,14 @@ LOCATIONS = [
     {
         "id": 1,
         "name": "Nashville North",
-        "address": "8422 Johnson Pike"
+        "address": "8422 Johnson Pike",
+        "status": "New"
     },
     {
         "id": 2,
         "name": "Nashville South",
-        "address": "209 Emory Drive"
+        "address": "209 Emory Drive",
+        "status": "Opening Soon"
     }
 ]
 
@@ -42,3 +44,9 @@ def delete_location(id):
             location_index = index
     if location_index>= 0:
         LOCATIONS.pop(location_index)
+
+def update_location(id, new_location):
+    for index, location in enumerate(LOCATIONS):
+        if location["id"] == id:
+            LOCATIONS[index] = new_location
+            break
