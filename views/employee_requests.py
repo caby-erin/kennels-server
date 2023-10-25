@@ -15,6 +15,7 @@ EMPLOYEES = [
     }
 ]
 def get_all_employees():
+    '''docstring'''
     with sqlite3.connect("./kennel.sqlite3") as conn:
         conn.row_factory = sqlite3.Row
         db_cursor = conn.cursor()
@@ -29,13 +30,16 @@ def get_all_employees():
         employees = []
         dataset = db_cursor.fetchall()
         for row in dataset:
-            employee = Employee(row['id'], row['name'], row['address'], row['location_id'])
+            employee = Employee(row['id'], row['name'],
+                                row['address'], row['location_id'])
 
-            employees.append(employee.__dict__) # see the notes below for an explanation on this line of code.
+            employees.append(employee.__dict__)
+            # see the notes below for an explanation on this line of code.
 
     return employees
 
 def get_single_employee(id):
+    '''docstring'''
     with sqlite3.connect("./kennel.sqlite3") as conn:
         conn.row_factory = sqlite3.Row
         db_cursor = conn.cursor()
@@ -54,12 +58,14 @@ def get_single_employee(id):
         return employee.__dict__
 
 def create_employee(employee):
+    '''docstring'''
     max_id = EMPLOYEES[-1]["id"]
     new_id = max_id + 1
     employee["id"] = new_id
     EMPLOYEES.append(employee)
     return employee
 
+'''
 def delete_employee(id):
     employee_index = -1
     for index, employee in enumerate(EMPLOYEES):
@@ -67,15 +73,16 @@ def delete_employee(id):
             employee_index = index
     if employee_index >= 0:
         EMPLOYEES.pop(employee_index)
-
+'''
 def update_employee(id, new_employee):
+    '''docstring'''
     for index, employee in enumerate(EMPLOYEES):
         if employee["id"] == id:
             EMPLOYEES[index] = new_employee
             break
 
 def get_employee_by_location(location_id):
-
+    '''docstring'''
     with sqlite3.connect("./kennel.sqlite3") as conn:
         conn.row_factory = sqlite3.Row
         db_cursor = conn.cursor()
@@ -99,3 +106,12 @@ def get_employee_by_location(location_id):
             employees.append(employee.__dict__)
 
     return employees
+
+def delete_employee(id):
+    with sqlite3.connect("./kennel.sqlite3") as conn:
+        db_cursor = conn.cursor()
+
+        db_cursor.execute("""
+        DELETE FROM employee
+        WHERE id = ?
+        """, (id, ))
