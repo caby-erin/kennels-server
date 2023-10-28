@@ -57,8 +57,8 @@ def get_single_animal(id):
 
         # Create an animal instance from the current row
         animal = Animal(data['id'], data['name'], data['breed'],
-                            data['status'], data['location_id'],
-                            data['customer_id'])
+                            data['status'], data['locationId'],
+                            data['customerId'])
 
         return animal.__dict__
 
@@ -120,6 +120,7 @@ def get_all_animals():
     return animals
 
 def create_animal(new_animal):
+    '''docstring'''
     with sqlite3.connect("./kennel.sqlite3") as conn:
         db_cursor = conn.cursor()
 
@@ -129,8 +130,8 @@ def create_animal(new_animal):
         VALUES
             ( ?, ?, ?, ?, ?);
         """, (new_animal['name'], new_animal['breed'],
-            new_animal['status'], new_animal['location_id'],
-            new_animal['customer_id'], ))
+              new_animal['status'], new_animal['locationId'],
+              new_animal['customerId'], ))
 
         # The `lastrowid` property on the cursor will return
         # the primary key of the last thing that got added to
@@ -146,6 +147,7 @@ def create_animal(new_animal):
     return new_animal
 
 def update_animal(id, new_animal):
+    '''docstring'''
     with sqlite3.connect("./kennel.sqlite3") as conn:
         db_cursor = conn.cursor()
 
@@ -159,8 +161,8 @@ def update_animal(id, new_animal):
                 customer_id = ?
         WHERE id = ?
         """, (new_animal['name'], new_animal['breed'],
-              new_animal['status'], new_animal['location_id'],
-              new_animal['customer_id'], id, ))
+              new_animal['status'], new_animal['locationId'],
+              new_animal['customerId'], id, ))
 
         # Were any rows affected?
         # Did the client send an `id` that exists?
