@@ -1,6 +1,6 @@
 import sqlite3
 import json
-from models import Employee
+from models import Employee, Location
 
 EMPLOYEES = [
     {
@@ -14,6 +14,7 @@ EMPLOYEES = [
         "status": "Old Hire"
     }
 ]
+
 def get_all_employees():
     '''docstring'''
     with sqlite3.connect("./kennel.sqlite3") as conn:
@@ -24,17 +25,29 @@ def get_all_employees():
             a.id,
             a.name,
             a.address,
-            a.location_id
-        FROM employee a
-        """)
+            a.location_id,
+            l.name location_name,
+            l.address location_address
+        FROM Employee a
+        JOIN Location l
+            ON l.id = a.location_id
+                """)
         employees = []
         dataset = db_cursor.fetchall()
-        for row in dataset:
-            employee = Employee(row['id'], row['name'],
-                                row['address'], row['location_id'])
 
+        for row in dataset:
+
+            # Create an animal instance from the current row
+            employee = Employee(row['id'], row['name'], row['address'], row['location_id'])
+
+            # Create a Location instance from the current row
+            location = Location(row['id'], row['location_name'], row['location_address'])
+
+            # Add the dictionary representation of the location to the animal
+            employee.location = location.__dict__
+
+            # Add the dictionary representation of the animal to the list
             employees.append(employee.__dict__)
-            # see the notes below for an explanation on this line of code.
 
     return employees
 
